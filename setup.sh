@@ -50,7 +50,7 @@ fi
 
 # 5. Add plugins
 # a. git
-if grep -q "plugins=(git composer zsh-syntax-highlighting zsh-autosuggestions zsh-completions)" ~/.zshrc; then
+if grep -q "plugins=(git)" ~/.zshrc; then
   echo "git plugin is already added"
 else
   echo "Adding git plugin..."
@@ -58,7 +58,7 @@ else
 fi
 
 # b. composer
-if grep -q "plugins=(git composer zsh-syntax-highlighting zsh-autosuggestions zsh-completions)" ~/.zshrc; then
+if grep -q "plugins=(composer)" ~/.zshrc; then
   echo "composer plugin is already added"
 else
   echo "Adding composer plugin..."
@@ -109,6 +109,9 @@ if [ -z "$(command -v docker-compose)" ]; then
 else
   echo "Docker Compose is already installed"
 fi
+
+# 
+source ~/.zshrc
 
 # 7. Set Zsh as the default shell
 chsh -s $(which zsh)
