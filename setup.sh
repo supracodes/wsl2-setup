@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 
 # 1. Update and upgrade packages
 sudo apt update -y
