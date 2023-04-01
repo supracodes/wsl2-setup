@@ -29,13 +29,13 @@ sudo update-alternatives --set php /usr/bin/php8.2
 echo "PHP 8.2 and its plugins installed successfully."
 
 if ! command -v composer &> /dev/null then
-    php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-    php composer-setup.php
-    php -r "unlink('composer-setup.php');"
-    sudo mv composer.phar /usr/bin/composer
-    echo "Composer installed successfully"
-  else
-    echo "Composer is already installed"
+  php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+  php composer-setup.php
+  php -r "unlink('composer-setup.php');"
+  sudo mv composer.phar /usr/bin/composer
+  echo "Composer installed successfully"
+else
+  echo "Composer is already installed"
 fi
 
 echo 'export PATH="$PATH:$HOME/.config/composer/vendor/bin"' >> ~/.bashrc && source ~/.bashrc
