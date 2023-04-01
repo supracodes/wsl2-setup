@@ -54,7 +54,6 @@ if grep -q "plugins=(git)" ~/.zshrc; then
   echo "git plugin is already added"
 else
   echo "Adding git plugin..."
-  sed -i 's/plugins=(/plugins=(git /' ~/.zshrc
 fi
 
 # b. composer
@@ -62,7 +61,6 @@ if grep -q "plugins=(composer)" ~/.zshrc; then
   echo "composer plugin is already added"
 else
   echo "Adding composer plugin..."
-  sed -i 's/plugins=(/plugins=(composer /' ~/.zshrc
 fi
 
 # c. zsh-syntax-highlighting
@@ -71,8 +69,6 @@ if [ -d ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting ]; then
 else
   echo "Installing zsh-syntax-highlighting plugin..."
   git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
-  echo "Adding zsh-syntax-highlighting plugin..."
-  sed -i 's/plugins=(/plugins=(zsh-syntax-highlighting /' ~/.zshrc
 fi
 
 # d. zsh-autosuggestions
@@ -81,8 +77,6 @@ if [ -d ~/.oh-my-zsh/custom/lugins/zsh-autosuggestions ]; then
 else
   echo "Installing zsh-autosuggestions plugin..."
   git clone https://github.com/zsh-users/zsh-autosuggestions.git ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
-  echo "Adding zsh-autosuggestions plugin..."
-  sed -i 's/plugins=(/plugins=(zsh-autosuggestions /' ~/.zshrc
 fi
 
 # e. zsh-completions
@@ -91,8 +85,6 @@ if [ -d ~/.oh-my-zsh/custom/plugins/zsh-completions ]; then
 else
   echo "Installing zsh-completions plugin..."
   git clone https://github.com/zsh-users/zsh-completions.git ~/.oh-my-zsh/custom/plugins/zsh-completions
-  echo "Adding zsh-completions plugin..."
-  sed -i 's/plugins=(/plugins=(zsh-completions /' ~/.zshrc
 fi
 
 # 6. Install Docker and Docker Compose if not already installed
@@ -110,7 +102,10 @@ else
   echo "Docker Compose is already installed"
 fi
 
-# 
+#
+plugins="git composer zsh-syntax-highlighting zsh-autosuggestions zsh-completions"
+sed -i "s/plugins=(.*)/plugins=($plugins)/" ~/.zshrc
+
 source ~/.zshrc
 
 # 7. Set Zsh as the default shell
