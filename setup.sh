@@ -28,7 +28,8 @@ sudo update-alternatives --set php /usr/bin/php8.2
 
 echo "PHP 8.2 and its plugins installed successfully."
 
-if ! command -v composer &> /dev/null then
+if ! command -v composer &> /dev/null
+then
   php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
   php composer-setup.php
   php -r "unlink('composer-setup.php');"
