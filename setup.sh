@@ -23,6 +23,9 @@ sudo apt-get install -y php8.2 php8.2-cli \
   php8.2-dom \
   php8.2-xml \
   php8.2-fpm
+
+sudo update-alternatives --set php /usr/bin/php8.2
+
 echo "PHP 8.2 and its plugins installed successfully."
 
 if ! command -v composer &> /dev/null then
