@@ -3,7 +3,7 @@
 sudo apt update -y
 sudo apt upgrade -y
 
-sudo apt install golang python3 pip -y
+sudo apt install golang python3 pip nodejs -y
 
 sudo apt-get update
 sudo apt-get install -y software-properties-common
