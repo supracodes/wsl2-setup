@@ -4,27 +4,6 @@
 sudo apt update -y
 sudo apt upgrade -y
 
-# 2. Cache apt update
-if [ ! -f /var/cache/apt/pkgcache.bin ]; then
-  sudo apt update -y
-else
-  echo "apt update is already cached"
-fi
-
-# 3. Install zsh if not already installed
-if [ -z "$(command -v zsh)" ]; then
-  sudo apt install zsh -y
-else
-  echo "zsh is already installed"
-fi
-
-# 4. Install Oh My Zsh if not already installed
-if [ ! -d ~/.oh-my-zsh ]; then
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-else
-  echo "Oh My Zsh is already installed"
-fi
-
 # Add the ondrej/php repository
 sudo apt-get update
 sudo apt-get install -y software-properties-common
@@ -107,7 +86,3 @@ plugins="git composer zsh-syntax-highlighting zsh-autosuggestions zsh-completion
 sed -i "s/plugins=(.*)/plugins=($plugins)/" ~/.zshrc
 
 source ~/.zshrc
-
-# 7. Set Zsh as the default shell
-chsh -s $(which zsh)
-echo "Zsh is now the default shell. Please log out and log back in for changes to take effect."
