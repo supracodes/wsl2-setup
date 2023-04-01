@@ -3,7 +3,10 @@
 sudo apt update -y
 sudo apt upgrade -y
 
-sudo apt install golang python3 pip nodejs -y
+sudo apt install golang python3 pip -y
+
+curl -fsSL https://deb.nodesource.com/setup_19.x | sudo -E bash - &&\
+sudo apt-get install -y nodejs
 
 sudo apt-get update
 sudo apt-get install -y software-properties-common
