@@ -76,8 +76,8 @@ else
   if [ ! -d "$HOME/.oh-my-zsh" ]; then
     sudo apt install zsh -y
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-
-    if [ ! -d "$HOME/.oh-my-zsh/plugins/zsh-syntax-highlighting" ]; then
+  else
+  if [ ! -d "$HOME/.oh-my-zsh/plugins/zsh-syntax-highlighting" ]; then
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.oh-my-zsh/plugins/zsh-syntax-highlighting
     fi
 
@@ -95,10 +95,9 @@ else
     sed -i 's/plugins=(git)/plugins=(git zsh-syntax-highlighting zsh-autosuggestions zsh-completions)/' $HOME/.zshrc
     echo "Zsh plugins added to .zshrc"
     fi
-
-    source $HOME/.zshrc
-
-  else
+    
     echo "Oh My Zsh is already installed"
   fi
+  
+  source $HOME/.zshrc
 fi
