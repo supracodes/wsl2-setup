@@ -70,34 +70,28 @@ else
   echo "Adding composer plugin..."
 fi
 
-if [ "$(echo $SHELL)" = "/usr/bin/zsh" ]; then
-  echo "Default shell is already set to zsh"
-else
-  if [ ! -d "$HOME/.oh-my-zsh" ]; then
-    sudo apt install zsh -y
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-  else
-  if [ ! -d "$HOME/.oh-my-zsh/plugins/zsh-syntax-highlighting" ]; then
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.oh-my-zsh/plugins/zsh-syntax-highlighting
-    fi
-
-    if [ ! -d "$HOME/.oh-my-zsh/plugins/zsh-autosuggestions" ]; then
-    git clone https://github.com/zsh-users/zsh-autosuggestions.git $HOME/.oh-my-zsh/plugins/zsh-autosuggestions
-    fi
-
-    if [ ! -d "$HOME/.oh-my-zsh/plugins/zsh-completions" ]; then
-    git clone https://github.com/zsh-users/zsh-completions.git $HOME/.oh-my-zsh/plugins/zsh-completions
-    fi
-
-    if grep -q "zsh-syntax-highlighting" $HOME/.zshrc && grep -q "zsh-autosuggestions" $HOME/.zshrc && grep -q "zsh-completions" $HOME/.zshrc; then
-    echo "Zsh plugins are already added to .zshrc"
-    else
-    sed -i 's/plugins=(git)/plugins=(git zsh-syntax-highlighting zsh-autosuggestions zsh-completions)/' $HOME/.zshrc
-    echo "Zsh plugins added to .zshrc"
-    fi
-    
-    echo "Oh My Zsh is already installed"
-  fi
-  
-  source $HOME/.zshrc
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+  sudo apt install zsh -y
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 fi
+
+if [ ! -d "$HOME/.oh-my-zsh/plugins/zsh-syntax-highlighting" ]; then
+  git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.oh-my-zsh/plugins/zsh-syntax-highlighting
+fi
+
+if [ ! -d "$HOME/.oh-my-zsh/plugins/zsh-autosuggestions" ]; then
+  git clone https://github.com/zsh-users/zsh-autosuggestions.git $HOME/.oh-my-zsh/plugins/zsh-autosuggestions
+fi
+
+if [ ! -d "$HOME/.oh-my-zsh/plugins/zsh-completions" ]; then
+  git clone https://github.com/zsh-users/zsh-completions.git $HOME/.oh-my-zsh/plugins/zsh-completions
+fi
+
+if grep -q "zsh-syntax-highlighting" $HOME/.zshrc && grep -q "zsh-autosuggestions" $HOME/.zshrc && grep -q "zsh-completions" $HOME/.zshrc; then
+  echo "Zsh plugins are already added to .zshrc"
+else
+  sed -i 's/plugins=(git)/plugins=(git zsh-syntax-highlighting zsh-autosuggestions zsh-completions)/' $HOME/.zshrc
+  echo "Zsh plugins added to .zshrc"
+fi
+  
+source $HOME/.zshrc
