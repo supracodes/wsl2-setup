@@ -1,40 +1,22 @@
 #!/bin/bash
 
-sudo apt update -y
-sudo apt upgrade -y
+sudo apt-get install -y php8.1 php8.1-cli \
+  php8.1-common \
+  php8.1-bcmath \
+  php8.1-opcache \
+  php8.1-mysql \
+  php8.1-pgsql \
+  php8.1-sqlite3 \
+  php8.1-mbstring \
+  php8.1-zip \
+  php8.1-curl \
+  php8.1-dom \
+  php8.1-xml \
+  php8.1-fpm
 
-sudo apt install golang python3 pip -y
+sudo update-alternatives --set php /usr/bin/php8.1
 
-if [ ! -d "$HOME/.oh-my-zsh" ]; then
-  sudo apt install zsh -y
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" <<< y
-fi
-
-curl -fsSL https://deb.nodesource.com/setup_19.x | sudo -E bash - &&\
-sudo apt-get install -y nodejs
-
-sudo apt-get update
-sudo apt-get install -y software-properties-common
-sudo add-apt-repository -y ppa:ondrej/php
-sudo apt-get update
-
-sudo apt-get install -y php8.2 php8.2-cli \
-  php8.2-common \
-  php8.2-bcmath \
-  php8.2-opcache \
-  php8.2-mysql \
-  php8.2-pgsql \
-  php8.2-sqlite3 \
-  php8.2-mbstring \
-  php8.2-zip \
-  php8.2-curl \
-  php8.2-dom \
-  php8.2-xml \
-  php8.2-fpm
-
-sudo update-alternatives --set php /usr/bin/php8.2
-
-echo "PHP 8.2 and its plugins installed successfully."
+echo "PHP 8.1 and its plugins installed successfully."
 
 if ! command -v composer &> /dev/null
 then
@@ -47,7 +29,12 @@ else
   echo "Composer is already installed"
 fi
 
-echo 'export PATH="$PATH:$HOME/.config/composer/vendor/bin"' >> ~/.bashrc && source ~/.bashrc
+echo 'export PATH="$PATH:$HOME/.config/composer/vendor/bin"' >> ~/.zshrc
+
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+  sudo apt install zsh -y
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" <<< y
+fi
 
 if grep -q "plugins=(git)" ~/.zshrc; then
   echo "git plugin is already added"
@@ -78,12 +65,6 @@ if grep -q "zsh-syntax-highlighting" $HOME/.zshrc && grep -q "zsh-autosuggestion
 else
   sed -i 's/plugins=(git)/plugins=(git zsh-syntax-highlighting zsh-autosuggestions zsh-completions)/' $HOME/.zshrc
   echo "Zsh plugins added to .zshrc"
-fi
-
-if [ "$BASH" ]; then
-  exec zsh
-else
-  echo "Not running on top of bash"
 fi
   
 source $HOME/.zshrc
