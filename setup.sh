@@ -49,20 +49,6 @@ fi
 
 echo 'export PATH="$PATH:$HOME/.config/composer/vendor/bin"' >> ~/.bashrc && source ~/.bashrc
 
-# if [ -z "$(command -v docker)" ]; then
-#   echo "Installing Docker..."
-#   sudo apt install docker.io -y
-# else
-#   echo "Docker is already installed"
-# fi
-
-# if [ -z "$(command -v docker-compose)" ]; then
-#   echo "Installing Docker Compose..."
-#   sudo apt install docker-compose -y
-# else
-#   echo "Docker Compose is already installed"
-# fi
-
 if grep -q "plugins=(git)" ~/.zshrc; then
   echo "git plugin is already added"
 else
@@ -92,6 +78,12 @@ if grep -q "zsh-syntax-highlighting" $HOME/.zshrc && grep -q "zsh-autosuggestion
 else
   sed -i 's/plugins=(git)/plugins=(git zsh-syntax-highlighting zsh-autosuggestions zsh-completions)/' $HOME/.zshrc
   echo "Zsh plugins added to .zshrc"
+fi
+
+if [ "$BASH" ]; then
+  exec zsh
+else
+  echo "Not running on top of bash"
 fi
   
 source $HOME/.zshrc
