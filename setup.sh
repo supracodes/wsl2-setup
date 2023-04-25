@@ -5,6 +5,11 @@ sudo apt upgrade -y
 
 sudo apt install golang python3 pip -y
 
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+  sudo apt install zsh -y
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" <<< y
+fi
+
 curl -fsSL https://deb.nodesource.com/setup_19.x | sudo -E bash - &&\
 sudo apt-get install -y nodejs
 
@@ -68,11 +73,6 @@ if grep -q "plugins=(composer)" ~/.zshrc; then
   echo "composer plugin is already added"
 else
   echo "Adding composer plugin..."
-fi
-
-if [ ! -d "$HOME/.oh-my-zsh" ]; then
-  sudo apt install zsh -y
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 fi
 
 if [ ! -d "$HOME/.oh-my-zsh/plugins/zsh-syntax-highlighting" ]; then
