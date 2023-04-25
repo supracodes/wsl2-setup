@@ -49,19 +49,19 @@ fi
 
 echo 'export PATH="$PATH:$HOME/.config/composer/vendor/bin"' >> ~/.bashrc && source ~/.bashrc
 
-if [ -z "$(command -v docker)" ]; then
-  echo "Installing Docker..."
-  sudo apt install docker.io -y
-else
-  echo "Docker is already installed"
-fi
+# if [ -z "$(command -v docker)" ]; then
+#   echo "Installing Docker..."
+#   sudo apt install docker.io -y
+# else
+#   echo "Docker is already installed"
+# fi
 
-if [ -z "$(command -v docker-compose)" ]; then
-  echo "Installing Docker Compose..."
-  sudo apt install docker-compose -y
-else
-  echo "Docker Compose is already installed"
-fi
+# if [ -z "$(command -v docker-compose)" ]; then
+#   echo "Installing Docker Compose..."
+#   sudo apt install docker-compose -y
+# else
+#   echo "Docker Compose is already installed"
+# fi
 
 if grep -q "plugins=(git)" ~/.zshrc; then
   echo "git plugin is already added"
