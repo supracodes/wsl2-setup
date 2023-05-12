@@ -1,5 +1,8 @@
 #!/bin/bash
 
+sudo add-apt-repository ppa:ondrej/php -y
+sudo apt update -y && sudo apt upgrade -y
+
 sudo apt-get install -y php8.1 php8.1-cli \
   php8.1-common \
   php8.1-bcmath \
@@ -66,5 +69,7 @@ else
   sed -i 's/plugins=(git)/plugins=(git zsh-syntax-highlighting zsh-autosuggestions zsh-completions)/' $HOME/.zshrc
   echo "Zsh plugins added to .zshrc"
 fi
-  
+
+zsh
+
 source $HOME/.zshrc
