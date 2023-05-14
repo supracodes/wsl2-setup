@@ -34,8 +34,11 @@ fi
 
 echo 'export PATH="$PATH:$HOME/.config/composer/vendor/bin"' >> ~/.zshrc
 
+sudo apt install zsh -y
+zsh
+chsh -s $(which zsh)
+
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
-  sudo apt install zsh -y
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" <<< y
 fi
 
@@ -70,6 +73,4 @@ else
   echo "Zsh plugins added to .zshrc"
 fi
 
-zsh
-
-source $HOME/.zshrc
+source ~/.zshrc
