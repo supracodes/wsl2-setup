@@ -1,6 +1,5 @@
 #!/bin/bash
 
-sudo add-apt-repository ppa:ondrej/php -y
 sudo apt update -y && sudo apt upgrade -y
 
 sudo apt-get install -y php8.1 php8.1-cli \
@@ -19,6 +18,13 @@ sudo apt-get install -y php8.1 php8.1-cli \
 
 sudo update-alternatives --set php /usr/bin/php8.1
 
+echo "Installing NVM"
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+
+nvm install --lts
+
 echo "PHP 8.1 and its plugins installed successfully."
 
 if ! command -v composer &> /dev/null
@@ -35,8 +41,6 @@ fi
 echo 'export PATH="$PATH:$HOME/.config/composer/vendor/bin"' >> ~/.zshrc
 
 sudo apt install zsh -y
-zsh
-chsh -s $(which zsh)
 
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" <<< y
@@ -72,5 +76,9 @@ else
   sed -i 's/plugins=(git)/plugins=(git zsh-syntax-highlighting zsh-autosuggestions zsh-completions)/' $HOME/.zshrc
   echo "Zsh plugins added to .zshrc"
 fi
+
+chsh -s $(which zsh)
+
+[ "$(basename "$SHELL")" != "zsh" ] && chsh -s "$(which zsh)" && echo "Shell changed to Zsh." || echo "The current shell is already Zsh."
 
 source ~/.zshrc
