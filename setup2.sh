@@ -33,10 +33,6 @@ then
     sudo apt-get install -y zsh > /dev/null 2>&1
 fi
 
-# 6. Run ZSH
-printf "${GREEN}Running ZSH...${NC}\n"
-zsh > /dev/null 2>&1
-
 # 7. Install Oh My Zsh if not already installed
 printf "${GREEN}Installing Oh My Zsh...${NC}\n"
 if [ ! -d "$HOME/.oh-my-zsh" ]
