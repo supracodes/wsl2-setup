@@ -1,71 +1,85 @@
 #!/bin/bash
 
-GREEN='\033[0;32m'
-NC='\033[0m' # No Color
+sudo apt update -y && sudo apt upgrade -y
 
-# 1. Install PHP 8.1
-printf "${GREEN}Installing PHP 8.1...${NC}\n"
-sudo add-apt-repository -y ppa:ondrej/php > /dev/null 2>&1
-sudo apt-get update > /dev/null 2>&1
-sudo apt-get install -y php8.1 php8.1-cli php8.1-fpm php8.1-mbstring php8.1-xml php8.1-zip php8.1-curl > /dev/null 2>&1
+sudo apt-get install -y php8.1 php8.1-cli \
+  php8.1-common \
+  php8.1-bcmath \
+  php8.1-opcache \
+  php8.1-mysql \
+  php8.1-pgsql \
+  php8.1-sqlite3 \
+  php8.1-mbstring \
+  php8.1-zip \
+  php8.1-curl \
+  php8.1-dom \
+  php8.1-xml \
+  php8.1-fpm
 
-# 2. Install PHP Composer
-printf "${GREEN}Installing PHP Composer...${NC}\n"
-curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer > /dev/null 2>&1
+sudo update-alternatives --set php /usr/bin/php8.1
 
-# 3. Install Laravel CLI
-printf "${GREEN}Installing Laravel CLI...${NC}\n"
-if ! command -v laravel &> /dev/null
+echo "Installing NVM"
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+
+nvm install --lts
+
+echo "PHP 8.1 and its plugins installed successfully."
+
+if ! command -v composer &> /dev/null
 then
-    composer global require laravel/installer > /dev/null 2>&1
+  php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+  php composer-setup.php
+  php -r "unlink('composer-setup.php');"
+  sudo mv composer.phar /usr/bin/composer
+  echo "Composer installed successfully"
+else
+  echo "Composer is already installed"
 fi
 
-# 4. Install Node.js and required global packages (yarn, typescript, prettier)
-printf "${GREEN}Installing Node.js and required global packages...${NC}\n"
-curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash - > /dev/null 2>&1
-sudo apt-get install -y nodejs > /dev/null 2>&1
-sudo npm install -g yarn typescript prettier > /dev/null 2>&1
+echo 'export PATH="$PATH:$HOME/.config/composer/vendor/bin"' >> ~/.zshrc
 
-# 5. Install ZSH
-printf "${GREEN}Installing ZSH...${NC}\n"
-if ! command -v zsh &> /dev/null
-then
-    sudo apt-get install -y zsh > /dev/null 2>&1
+sudo apt install zsh -y
+
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" <<< y
 fi
 
-# 6. Run ZSH
-printf "${GREEN}Running ZSH...${NC}\n"
-zsh > /dev/null 2>&1
-
-# 7. Install Oh My Zsh if not already installed
-printf "${GREEN}Installing Oh My Zsh...${NC}\n"
-if [ ! -d "$HOME/.oh-my-zsh" ]
-then
-    sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" > /dev/null 2>&1
+if grep -q "plugins=(git)" ~/.zshrc; then
+  echo "git plugin is already added"
+else
+  echo "Adding git plugin..."
 fi
 
-# 8. Install Zsh plugins
-printf "${GREEN}Installing Zsh plugins...${NC}\n"
-if [ ! -d "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" ]
-then
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_CUSTOM/plugins/zsh-syntax-highlighting > /dev/null 2>&1
+if grep -q "plugins=(composer)" ~/.zshrc; then
+  echo "composer plugin is already added"
+else
+  echo "Adding composer plugin..."
 fi
 
-if [ ! -d "$ZSH_CUSTOM/plugins/zsh-autosuggestions" ]
-then
-    git clone https://github.com/zsh-users/zsh-autosuggestions.git $ZSH_CUSTOM/plugins/zsh-autosuggestions > /dev/null 2>&1
+if [ ! -d "$HOME/.oh-my-zsh/plugins/zsh-syntax-highlighting" ]; then
+  git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.oh-my-zsh/plugins/zsh-syntax-highlighting
 fi
 
-if [ ! -d "$ZSH_CUSTOM/plugins/zsh-completions" ]
-then
-    git clone https://github.com/zsh-users/zsh-completions.git $ZSH_CUSTOM/plugins/zsh-completions > /dev/null 2>&1
+if [ ! -d "$HOME/.oh-my-zsh/plugins/zsh-autosuggestions" ]; then
+  git clone https://github.com/zsh-users/zsh-autosuggestions.git $HOME/.oh-my-zsh/plugins/zsh-autosuggestions
 fi
 
-if [ ! -d "$ZSH_CUSTOM/plugins/zsh-artisan" ]
-then
-    git clone https://github.com/jessarcher/zsh-artisan.git $ZSH_CUSTOM/plugins/zsh-artisan > /dev/null 2>&1
+if [ ! -d "$HOME/.oh-my-zsh/plugins/zsh-completions" ]; then
+  git clone https://github.com/zsh-users/zsh-completions.git $HOME/.oh-my-zsh/plugins/zsh-completions
 fi
 
-# 9. Source .zshrc
-printf "${GREEN}Sourcing .zshrc...${NC}\n"
-source ~/.zshrc > /dev/null 2>&1
+if grep -q "zsh-syntax-highlighting" $HOME/.zshrc && grep -q "zsh-autosuggestions" $HOME/.zshrc && grep -q "zsh-completions" $HOME/.zshrc; then
+  echo "Zsh plugins are already added to .zshrc"
+else
+  sed -i 's/plugins=(git)/plugins=(git zsh-syntax-highlighting zsh-autosuggestions zsh-completions)/' $HOME/.zshrc
+  echo "Zsh plugins added to .zshrc"
+fi
+
+chsh -s $(which zsh)
+
+[ "$(basename "$SHELL")" != "zsh" ] && chsh -s "$(which zsh)" && echo "Shell changed to Zsh." || echo "The current shell is already Zsh."
+
+source ~/.zshrc
+
