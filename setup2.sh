@@ -1,67 +1,91 @@
 #!/bin/bash
 
-GREEN='\033[0;32m'
-NC='\033[0m' # No Color
+# Update system and install necessary dependencies
+sudo apt update
+sudo apt upgrade -y
+sudo apt install -y git curl wget unzip
 
-# 1. Install PHP 8.1
-printf "${GREEN}Installing PHP 8.1...${NC}\n"
-sudo add-apt-repository -y ppa:ondrej/php > /dev/null 2>&1
-sudo apt-get update > /dev/null 2>&1
-sudo apt-get install -y php8.1 php8.1-cli php8.1-fpm php8.1-mbstring php8.1-xml php8.1-zip php8.1-curl > /dev/null 2>&1
-
-# 2. Install PHP Composer
-printf "${GREEN}Installing PHP Composer...${NC}\n"
-curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer > /dev/null 2>&1
-
-# 3. Install Laravel CLI
-printf "${GREEN}Installing Laravel CLI...${NC}\n"
-if ! command -v laravel &> /dev/null
-then
-    composer global require laravel/installer > /dev/null 2>&1
+# Check if PHP is already installed
+if ! command -v php &> /dev/null; then
+    # Install PHP 8.1 and 8.2 from the official PHP repository
+    sudo apt install -y software-properties-common
+    sudo add-apt-repository ppa:ondrej/php
+    sudo apt update
+    sudo apt install -y php8.1 php8.2
+    echo "PHP 8.1 and 8.2 installed"
+else
+    echo "PHP already installed"
 fi
 
-# 4. Install Node.js and required global packages (yarn, typescript, prettier)
-printf "${GREEN}Installing Node.js and required global packages...${NC}\n"
-curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash - > /dev/null 2>&1
-sudo apt-get install -y nodejs > /dev/null 2>&1
-sudo npm install -g yarn typescript prettier > /dev/null 2>&1
-
-# 5. Install ZSH
-printf "${GREEN}Installing ZSH...${NC}\n"
-if ! command -v zsh &> /dev/null
-then
-    sudo apt-get install -y zsh > /dev/null 2>&1
+# Check if Composer is already installed
+if ! command -v composer &> /dev/null; then
+    # Install Composer
+    sudo apt install -y composer
+    echo "Composer installed"
+else
+    echo "Composer already installed"
 fi
 
-# 7. Install Oh My Zsh if not already installed
-printf "${GREEN}Installing Oh My Zsh...${NC}\n"
-if [ ! -d "$HOME/.oh-my-zsh" ]
-then
-    sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" > /dev/null 2>&1
+# Check if NVM is already installed
+if ! command -v nvm &> /dev/null; then
+    # Install NVM and set up global packages
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+    source ~/.bashrc
+    nvm install --lts
+    npm install --global yarn prettier typescript ts-node
+    echo "NVM and global packages installed"
+else
+    echo "NVM already installed"
 fi
 
-# 8. Install Zsh plugins
-printf "${GREEN}Installing Zsh plugins...${NC}\n"
-if [ ! -d "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" ]
-then
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_CUSTOM/plugins/zsh-syntax-highlighting > /dev/null 2>&1
+# Check if Zsh is already installed
+if ! command -v zsh &> /dev/null; then
+    # Install Zsh
+    sudo apt install -y zsh
+    echo "Zsh installed"
+else
+    echo "Zsh already installed"
 fi
 
-if [ ! -d "$ZSH_CUSTOM/plugins/zsh-autosuggestions" ]
-then
-    git clone https://github.com/zsh-users/zsh-autosuggestions.git $ZSH_CUSTOM/plugins/zsh-autosuggestions > /dev/null 2>&1
+# Check if Oh My Zsh is already installed
+if [ ! -d ~/.oh-my-zsh ]; then
+    # Install Oh My Zsh and additional plugins
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    git clone https://github.com/zsh-users/zsh-completions ~/.oh-my-zsh/custom/plugins/zsh-completions
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+    git clone https://github.com/zsh-users/zsh-autosuggestions.git ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+    sed -i 's/plugins=(git)/plugins=(git composer docker)/' ~/.zshrc
+    echo "Oh My Zsh and additional plugins installed"
+else
+    echo "Oh My Zsh and additional plugins already installed"
 fi
 
-if [ ! -d "$ZSH_CUSTOM/plugins/zsh-completions" ]
-then
-    git clone https://github.com/zsh-users/zsh-completions.git $ZSH_CUSTOM/plugins/zsh-completions > /dev/null 2>&1
+# Set Zsh as the default shell
+if [[ $SHELL != "/usr/bin/zsh" ]]; then
+    chsh -s $(which zsh)
+    echo "Zsh set as the default shell"
+else
+    echo "Zsh is already the default shell"
 fi
 
-if [ ! -d "$ZSH_CUSTOM/plugins/zsh-artisan" ]
-then
-    git clone https://github.com/jessarcher/zsh-artisan.git $ZSH_CUSTOM/plugins/zsh-artisan > /dev/null 2>&1
-fi
+# Provide feedback on installation status
+echo
+echo "PHP versions installed:"
+php --version
+echo
+echo "Composer installed:"
+composer --version
+echo
+echo "Node.js and NPM installed:"
+node --version
+npm --version
+echo
+echo "Yarn installed:"
+yarn --version
+echo
+echo "Zsh installed:"
+zsh --version
 
-# 9. Source .zshrc
-printf "${GREEN}Sourcing .zshrc...${NC}\n"
-source ~/.zshrc > /dev/null 2>&1
+# Instructions for setting up default shell
+echo
+echo "To set Zsh as the default shell, please log out and log back in."
