@@ -74,7 +74,7 @@ install_oh_my_zsh() {
 install_php() {
   if ! command_exists php; then
     PHP_VERSION=$(gum choose --header "Choose PHP Version to be installed" --header.foreground "212" --header.margin="1 1" "7.4" "8.0" "8.1")
-    gum spin --spinner dot --title "Installing PHP and its Extensions..." -- sudo apt install -y php$PHP_VERSION php$PHP_VERSION-cli php$PHP_VERSION-common php$PHP_VERSION-json php$PHP_VERSION-opcache php$PHP_VERSION-mysql php$PHP_VERSION-zip php$PHP_VERSION-fpm php$PHP_VERSION-mbstring
+    gum spin --spinner dot --title "Installing PHP and its Extensions..." -- sudo apt install -y php$PHP_VERSION php$PHP_VERSION-{cli,common,opcache,mysql,sqlite3,pgsql,zip,fpm,mbstring,intl,dom,xml,xdebug,curl}
   fi
 
   silent_output "Install PHP complete."
