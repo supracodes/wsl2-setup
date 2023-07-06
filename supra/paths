@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# List paths
+path=(
+    "$HOME/.config/composer/vendor/bin" # composer bin
+)

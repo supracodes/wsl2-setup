@@ -4,7 +4,7 @@
 sudo -v
 
 # # updating
-# sudo apt update -y && sudo apt upgrade -y
+sudo apt update -y && sudo apt upgrade -y
 
 # install jq for json parsing
 if ! command -v jq &>/dev/null; then
@@ -29,8 +29,19 @@ php_version=$(echo $config | jq -r '.apt.packages.additions.php.version')
 php_extensions=$(echo $config | jq '.apt.packages.additions.php.extensions')
 composer_packages=$(echo $config | jq '.apt.packages.additions.composer.packages')
 
+# check if command is available.
+check_command_availability() {
+    local command="$1"
+    
+    if command -v "$command" >/dev/null 2>&1; then
+        return 0  # Command is available
+    else
+        return 1  # Command is not available
+    fi
+}
+
 # check if path exists in PATH
-path_exists() {
+function path_exists() {
     local path_to_check=$1
     local IFS=':'
 
@@ -43,7 +54,7 @@ path_exists() {
     return 1
 }
 
-copyRcFiles() {
+function copyRcFiles() {
     if [ -f "$zshrc_path" ]; then
         cp "$HOME/.zshrc" "$HOME/.zshrc-backup"
     fi
@@ -63,14 +74,14 @@ copyRcFiles() {
 }
 
 # install required packages
-install_required_packages() {
+function install_required_packages() {
     for package in $(echo "$required_packages" | jq -r '.[]'); do
         sudo apt install $package -y
     done
 }
 
 # install php packages
-install_php_packages() {
+function install_php_packages() {
     sudo apt install "php$php_version" -y
     for php_extension in $(echo "$php_extensions" | jq -r '.[]'); do
         sudo apt install -y $php_extension
@@ -78,7 +89,7 @@ install_php_packages() {
 }
 
 # install composer
-install_composer() {
+function install_composer() {
     sudo apt install composer -y
     composer_bin_dir=$(composer global config bin-dir --absolute -q)
 
@@ -102,20 +113,20 @@ install_composer() {
 }
 
 # Install plugins
-install_omz_plugins() {
+function install_omz_plugins() {
     . $zshrc_path
 
     plugins=$(echo "$config" | jq -r '.oh_my_zsh.plugins[]')
 
     for plugin in $plugins; do
         name=$(echo "$plugin" | jq -r '.name')
-        installed=$(omz plugin list | grep -c "$name")
+        plugin_path="$ZSH_CUSTOM/plugins/$name"
 
         if [ "$installed" -eq 0 ]; then
             url=$(echo "$plugin" | jq -r '.url')
             git clone "$url" "$ZSH_CUSTOM/plugins/$name"
 
-            if type omz >/dev/null 2>&1; then
+            if check_command_availability "omz"; then
                 omz plugin enable "$name"
             fi
         fi
@@ -123,9 +134,12 @@ install_omz_plugins() {
 }
 
 # install oh-my-zsh
-install_oh_my_zsh() {
+function install_oh_my_zsh() {
     if [ ! -d "$HOME/.oh-my-zsh" ]; then
-        sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" <<<"y"
+        sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" <<< y
+
+        echo 'export ZSH="$HOME/.oh-my-zsh"' >> $variables_rc
+        echo 'export ZSH_THEME="amuse"' >> $variables_rc
     fi
 }
 
@@ -146,3 +160,6 @@ install_php_packages
 
 echo "Installing Composer..."
 install_composer
+
+# set default shell to zsh
+# sudo chsh -s $(which zsh) $whoami

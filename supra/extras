@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# List extras (functions, etc.)
+
+# load nvm
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"

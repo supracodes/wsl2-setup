@@ -26,7 +26,6 @@ function uninstall_composer() {
 function remove_src_files() {
     dirs=(
         ~/.zsh
-        ~/.zshrc
         ~/.oh-my-zsh
     )
 
@@ -35,6 +34,10 @@ function remove_src_files() {
             sudo rm -r "$dir"
         fi
     done
+
+    if [ -f ~/.zshrc ]; then
+        sudo rm ~/.zshrc
+    fi
 }
 
 #

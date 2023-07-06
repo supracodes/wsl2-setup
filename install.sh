@@ -1,22 +1,59 @@
-#!/bin/bash
+#!/bin/sh
 
-# My personal setup script for installing and configuring the Ubuntu 22.04
+# request sudo access permissions
+sudo -v
 
-# exit if not running Ubuntu 22.04
-if [ ! -f /etc/os-release ]; then
-    exit 1
-fi
+# update system
+sudo apt update -y && sudo apt upgrade -y
 
-# if figlet is not installed, install it
-if ! command -v figlet &>/dev/null; then
-    sudo apt install figlet -y
-fi
+# install required package
+sudo apt install -y zsh \
+    curl \
+    wget \
+    zip \
+    unzip \
+    neovim
 
-# if zsh is not installed, install it
-if ! command -v zsh &>/dev/null; then
-    sudo apt install zsh -y
-fi
+# installing PHP
+sudo apt install -y php8.1 \
+    php8.1-bcmath \
+    php8.1-curl \
+    php8.1-gd \
+    php8.1-mbstring \
+    php8.1-mysql \
+    php8.1-xml \
+    php8.1-zip \
+    php8.1-sqlite3 \
+    php8.1-pgsql \
+    php8.1-intl \
+    php8.1-redis \
+    php8.1-xdebug
 
-echo "Supra Billionaire" | figlet -f slant
+# install composer
+sudo apt install -y composer
 
-./installer-zsh.zsh
+# install global composer package
+composer global required laravel/installer
+composer global required laravel/pint
+
+# install golang
+sudo apt install -y golang
+
+# install python3
+sudo apt install -y python
+
+# install NodeJS and Npm
+nvm install --lts
+
+# install global npm package
+npm install -g yarn prettier typescript eslint
+
+# copying .zshrc
+sudo cp ./.zshrc $HOME
+
+# copying config dir
+sudo cp ./supra $HOME/.config
+
+# copying components
+sudo cp -r ./components/.oh-my-zsh $HOME
+sudo cp -r ./components/.nvm $HOME
