@@ -22,14 +22,6 @@ variables_rc="$HOME/.zsh/variables"
 aliases_rc="$HOME/.zsh/aliases"
 extras_rc="$HOME/.zsh/extras"
 
-echo "$zshrc_path"
-echo "$paths_rc"
-echo "$variables_rc"
-echo "$aliases_rc"
-echo "$extras_rc"
-
-exit
-
 # get config.json
 config=$(cat config.json)
 required_packages=$(echo $config | jq '.apt.packages.required')
@@ -109,6 +101,35 @@ function install_composer() {
     done
 }
 
+# Install plugins
+install_omz_plugins() {
+    . $zshrc_path
+
+    plugins=$(echo "$config" | jq -r '.oh_my_zsh.plugins[]')
+
+    for plugin in $plugins; do
+        name=$(echo "$plugin" | jq -r '.name')
+        installed=$(omz plugin list | grep -c "$name")
+
+        if [ "$installed" -eq 0 ]; then
+            url=$(echo "$plugin" | jq -r '.url')
+            git clone "$url" "$ZSH_CUSTOM/plugins/$name"
+
+            if type omz >/dev/null 2>&1; then
+                omz plugin enable "$name"
+            fi
+        fi
+    done
+}
+
+# install oh-my-zsh
+function install_oh_my_zsh() {
+    if [ ! -d "$HOME/.oh-my-zsh" ]; then
+        sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" <<<"y"
+    fi
+}
+
+echo "Copying config files..."
 copyRcFiles
 
 echo "Installing required packages..."
@@ -116,3 +137,9 @@ install_required_packages
 
 echo "Installing PHP packages..."
 install_composer
+
+echo "Insntalling Oh My Zsh..."
+install_oh_my_zsh
+
+echo "Installing Oh My Zsh plugins..."
+install_omz_plugins

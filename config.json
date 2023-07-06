@@ -35,7 +35,7 @@
       }
     }
   },
-  "oh-my-zsh": {
+  "oh_my_zsh": {
     "fonts": {
       "shell": "./fonts/shell-installer.sh",
       "powershell": "./fonts/powershell-installer.ps1"
@@ -49,19 +49,19 @@
     ],
     "plugins": [
       {
-        "git": "https://github.com/zsh-users/zsh-autosuggestions.git",
+        "url": "https://github.com/zsh-users/zsh-autosuggestions.git",
         "name": "zsh-autosuggestions"
       },
       {
-        "git": "https://github.com/zsh-users/zsh-autosuggestions.git",
+        "url": "https://github.com/zsh-users/zsh-autosuggestions.git",
         "name": "zsh-autosuggestions"
       },
       {
-        "git": "https://github.com/zsh-users/zsh-completions.git",
+        "url": "https://github.com/zsh-users/zsh-completions.git",
         "name": "zsh-completions"
       },
       {
-        "git": "https://github.com/jessarcher/zsh-artisan.git",
+        "url": "https://github.com/jessarcher/zsh-artisan.git",
         "name": "zsh-artisan"
       }
     ]
