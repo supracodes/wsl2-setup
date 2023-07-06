@@ -25,7 +25,7 @@ extras_rc="$HOME/.zsh/extras"
 # get config.json
 config=$(cat config.json)
 required_packages=$(echo $config | jq '.apt.packages.required')
-php_version=$(echo $config | jq '.apt.packages.additions.php.version')
+php_version=$(echo $config | jq -r '.apt.packages.additions.php.version')
 php_extensions=$(echo $config | jq '.apt.packages.additions.php.extensions')
 composer_packages=$(echo $config | jq '.apt.packages.additions.composer.packages')
 
@@ -43,7 +43,7 @@ path_exists() {
     return 1
 }
 
-function copyRcFiles() {
+copyRcFiles() {
     if [ -f "$zshrc_path" ]; then
         cp "$HOME/.zshrc" "$HOME/.zshrc-backup"
     fi
@@ -63,22 +63,22 @@ function copyRcFiles() {
 }
 
 # install required packages
-function install_required_packages() {
+install_required_packages() {
     for package in $(echo "$required_packages" | jq -r '.[]'); do
         sudo apt install $package -y
     done
 }
 
 # install php packages
-function install_php_packages() {
+install_php_packages() {
     sudo apt install "php$php_version" -y
-    for extension in $(echo "$php_extensions" | jq -r '.[]'); do
-        sudo apt install "php$php_version-$extension" -y
+    for php_extension in $(echo "$php_extensions" | jq -r '.[]'); do
+        sudo apt install -y $php_extension
     done
 }
 
 # install composer
-function install_composer() {
+install_composer() {
     sudo apt install composer -y
     composer_bin_dir=$(composer global config bin-dir --absolute -q)
 
@@ -123,23 +123,26 @@ install_omz_plugins() {
 }
 
 # install oh-my-zsh
-function install_oh_my_zsh() {
+install_oh_my_zsh() {
     if [ ! -d "$HOME/.oh-my-zsh" ]; then
         sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" <<<"y"
     fi
 }
 
-echo "Copying config files..."
-copyRcFiles
-
 echo "Installing required packages..."
 install_required_packages
-
-echo "Installing PHP packages..."
-install_composer
 
 echo "Insntalling Oh My Zsh..."
 install_oh_my_zsh
 
 echo "Installing Oh My Zsh plugins..."
 install_omz_plugins
+
+echo "Copying config files..."
+copyRcFiles
+
+echo "Installing PHP packages..."
+install_php_packages
+
+echo "Installing Composer..."
+install_composer
