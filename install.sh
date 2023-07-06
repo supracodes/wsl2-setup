@@ -3,6 +3,14 @@
 # request sudo access permissions
 sudo -v
 
+# copying .zshrc
+sudo cp ./.zshrc $HOME
+
+# copying config dir
+sudo cp ./supra $HOME/.config
+
+. $HOME/.zshrc
+
 # update system
 sudo apt update -y && sudo apt upgrade -y
 
@@ -41,12 +49,6 @@ sudo apt install -y golang
 
 # install python3
 sudo apt install -y python
-
-# copying .zshrc
-sudo cp ./.zshrc $HOME
-
-# copying config dir
-sudo cp ./supra $HOME/.config
 
 # install NodeJS and Npm
 sudo cp -r ./components/.nvm $HOME
