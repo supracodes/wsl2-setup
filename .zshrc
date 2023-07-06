@@ -7,13 +7,7 @@ source $CONFIG_PATH/paths
 source $CONFIG_PATH/aliases
 
 # oh my zsh config
-plugins=(
-    git
-    zsh-autosuggestions
-    zsh-syntax-highlighting
-    zsh-completions
-    artisan
-)
+plugins=()
 
 source $ZSH/oh-my-zsh.sh
 source $CONFIG_PATH/extras
