@@ -1,0 +1,14 @@
+#!/usr/bin/bash
+
+source ~/.zsh/paths
+source ~/.zsh/variables
+source ~/.zsh/aliases
+
+# oh my zsh config
+if [ -f ~/.zsh/oh-my-zsh.sh ]; then
+    plugins=()
+
+    source $ZSH/oh-my-zsh.sh
+fi
+
+source ~/.zsh/extras

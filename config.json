@@ -1,0 +1,69 @@
+{
+  "apt": {
+    "packages": {
+      "required": [
+        "git",
+        "zsh",
+        "vim",
+        "neovim",
+        "zip",
+        "unzip",
+        "curl",
+        "wget"
+      ],
+      "additions": {
+        "php": {
+          "version": "8.1",
+          "extensions": [
+            "php8.1-bcmath",
+            "php8.1-curl",
+            "php8.1-gd",
+            "php8.1-mbstring",
+            "php8.1-mysql",
+            "php8.1-xml",
+            "php8.1-zip",
+            "php8.1-sqlite3",
+            "php8.1-pgsql",
+            "php8.1-intl",
+            "php8.1-redis",
+            "php8.1-xdebug"
+          ]
+        },
+        "composer": {
+          "packages": ["laravel/installer", "laravel/pint"]
+        }
+      }
+    }
+  },
+  "oh-my-zsh": {
+    "fonts": {
+      "shell": "./fonts/shell-installer.sh",
+      "powershell": "./fonts/powershell-installer.ps1"
+    },
+    "themes": [
+      {
+        "name": "powerlevel10k",
+        "git": "https://github.com/romkatv/powerlevel10k.git",
+        "configFile": "./p10k.zsh"
+      }
+    ],
+    "plugins": [
+      {
+        "git": "https://github.com/zsh-users/zsh-autosuggestions.git",
+        "name": "zsh-autosuggestions"
+      },
+      {
+        "git": "https://github.com/zsh-users/zsh-autosuggestions.git",
+        "name": "zsh-autosuggestions"
+      },
+      {
+        "git": "https://github.com/zsh-users/zsh-completions.git",
+        "name": "zsh-completions"
+      },
+      {
+        "git": "https://github.com/jessarcher/zsh-artisan.git",
+        "name": "zsh-artisan"
+      }
+    ]
+  }
+}
