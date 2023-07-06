@@ -33,8 +33,8 @@ sudo apt install -y php8.1 \
 sudo apt install -y composer
 
 # install global composer package
-composer global required laravel/installer
-composer global required laravel/pint
+composer global require laravel/installer
+composer global require laravel/pint
 
 # install golang
 sudo apt install -y golang
