@@ -42,18 +42,21 @@ sudo apt install -y golang
 # install python3
 sudo apt install -y python
 
-# install NodeJS and Npm
-nvm install --lts
-
-# install global npm package
-npm install -g yarn prettier typescript eslint
-
 # copying .zshrc
 sudo cp ./.zshrc $HOME
 
 # copying config dir
 sudo cp ./supra $HOME/.config
 
+# install NodeJS and Npm
+sudo cp -r ./components/.nvm $HOME
+nvm install --lts
+
+# install global npm package
+npm install -g yarn prettier typescript eslint
+
 # copying components
 sudo cp -r ./components/.oh-my-zsh $HOME
-sudo cp -r ./components/.nvm $HOME
+
+# make zsh default shell
+chsh -s $(which zsh)
